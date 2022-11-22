@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<body ng-app="Myapp" ng-controller="ctlemp as h">
+    <style>
+        body {
+          background-image: url('./img1.jpg');
+          background-attachment: fixed;
+          background-size: cover;
+        }
+        </style>
+<div ng-switch on="h.page">
+    <div ng-switch-when="EmpOffice" ng-controller="Myc as c">
+    <form>
+        <hr>
+    <table cellpadding="3" cellspacing="0">
+        <!--<tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="3">sample</td>
+        </tr>-->
+        <legend ><b>Aircraft Engine Prediction</b></legend>
+        <tr>
+            <td>
+                Engine Name:
+            </td>
+            <td>
+                <input type="text" ng-model="c.employee.UserName" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Power type:
+            </td>
+            <td>
+                <input type="radio" name="Power" value="HP" ng-model="c.employee.Gender"/>HP<input type="radio" name="Power" value="LP" ng-model="c.employee.Gender"/>LP
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Engine Model:
+            </td>
+            <td>
+                <select ng-options="dep.Id as dep.Name for dep in c.loaddep" ng-model="c.employee.Admin"/>         
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Power:
+            </td>
+            <td>
+                <select ng-options="city.Id as city.Name for city in c.loadcity" ng-model="c.employee.City"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Reporting to:
+            </td>
+            <td>
+                <input type="text" ng-model="c.employee.Email"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Engine Description:
+            </td>
+            <td>
+                <textarea rows="4" cols="10" ng-model="c.employee.Address"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Engine Failure Causes:
+            </td>
+            <td>
+                <input type="checkbox" ng-model="c.employee.Travelling" value={{c.loadinterset[0].Id}}>{{c.loadinterset[0].Name}}</input>
+                <input type="checkbox" ng-model="c.employee.Movies" value={{c.loadinterset[1].Id}}>{{c.loadinterset[1].Name}}</input>
+                <input type="checkbox" ng-model="c.employee.Music" value={{c.loadinterset[2].Id}}>{{c.loadinterset[2].Name}}</input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Verification:
+            </td>
+            <td>
+                <input type="checkbox" ng-model="c.employee.Accepting"></input>
+            </td>
+        </tr>
+        <tr>
+            <td  colspan ="2" align = "center">
+                <button ng-click="c.addemp()">Predit</button>                                
+                <button ng-click="c.filteremp()">Filter</button>
+            </td>                                                               
+        </tr>
+    <table>
+    </form>
+    <hr />
+    <span ng-show="c.employee.filter">
+        <br />
+        <br />
+        Filter: <input type="text" ng-model="c.employee.filterby" />
+        <br />
+        <br />
+        <hr />
+    </span>
+<table cellpadding="3" cellspacing="0" border="1">
+    <tr>
+        <th>S. No</th>
+        <th>Engine Name</th>
+        <th>Power type</th>
+        <th>Engine Model</th>
+        <th>Power</th>
+        <th>Reporting to</th>
+        <th>Engine Description</th>
+        <th>Engine Failure Details (Air Blockage, Fuel Exhaustion, Carburettor ice)</th>
+        <th>Verification</th>
+    </tr>
+    <tr ng-repeat="e in c.emplist|filter:c.employee.filterby" style="color:#fff">
+        <td>{{$index+1}}</td>
+        <td>{{e.UserName}}</td>
+        <td>{{e.Gender}}</td>
+        <td>{{e.Admin}}</td>
+        <td>{{e.City}}</td>
+        <td>{{e.Email}}</td>
+        <td>{{e.Address}}</td>
+        <td>{{e.Travelling}},{{e.Movies}},{{e.Music}}</td>
+        <td>{{e.Accepting}}</td>
+        <td>
+            <button ng-click="c.Edit($index)">Edit</button>
+        </td>
+        <td>
+            <button ng-click="c.rmemp($index)">Delete</button>
+        </td>
+    </tr>
+    </table>
+    <hr />
+ </div>
+<div ng-switch-when="EmpPro" ng-controller="Myc as c">
+employee Personal Details
+</div>
+
+</div>    
+    <script>
+        function empCities() {
+            
+            this.cities = [{ "Id": 1, "Name": "Above 50", "State": "Tamilnadu" },
+           { "Id": 2, "Name": "Above 100", "State": "Delhi" },
+           { "Id": 3, "Name": "Above 150", "State": "Maharastra" },
+           { "Id": 4, "Name": "Above 200", "State": "Maharastra" },
+           { "Id": 5, "Name": "Above 250", "State": "Karnataka" }]
+        }
+        function empDepartment() {
+            
+            this.departments = [{ "Id": 1, "Name": "A-12345", "Manager": "Model" },
+            {"Id":2,"Name":"B-12345","Manager":"Model"},
+            {"Id":3,"Name":"C-12345","Manager":"Model"},
+            {"Id":4,"Name":"D-12345","Manager":"Model"}]
+        }
+        function empInterest() {
+
+            
+            this.interests = [{ "Id": 1, "Name": "Air Blockage" },
+                { "Id": 2, "Name": "Fuel Exhaustion" },
+                { "Id": 3, "Name": "Carburettor ice" }];
+        }
+        function empdetails() {
+           var self = this;
+            self.UserName = '';
+            self.Gender = '';
+            self.City = '';
+            self.Admin = '';
+            self.Email = '';
+            self.Address = '';
+            self.CreatePassword = '';
+            self.Travelling = true;
+            self.Movies = false;
+            self.Music = true;
+            self.filter = false;
+            self.Accepting = '';
+            self.filterby = '';
+        }
+        function empmgm() {
+            var self = this;
+            self.index;
+            self.employee = new empdetails();
+            self.emplist = [];
+            self.loaddep = new empDepartment().departments;
+            self.loadcity = new empCities().cities;
+            self.loadinterset = new empInterest().interests;
+            self.addemp = function (){
+                                        self.emplist.push(self.employee);
+                                        self.employee = new empdetails();
+                                        console.log('Emp Added');
+                                     };
+            self.rmemp = function (i){
+                                        self.emplist.splice(i,1);
+                                        console.log('Last Emp Delete');
+            };
+            self.filteremp = function () {
+                self.employee.filter = !self.employee.filter;
+            };
+            self.Edit = function (i) {
+                self.employee= self.emplist[i]
+                self.employee.filterby = self.emplist[i].Name;
+                self.index = i;
+            };
+            self.Updatemp = function () {
+                self.emplist[self.index] = self.employee
+                self.employee.filterby = "";
+                self.employee = new empdetails();
+            }
+            
+        }
+        var app = angular.module("Myapp", []);
+        app.controller("ctlemp", [function () {
+            this.page = "EmpOffice";
+            
+        }]);
+        app.controller("Myc", [empmgm]);
+    </script>
+</body>
+</html>
